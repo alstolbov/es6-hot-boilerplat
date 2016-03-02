@@ -1,0 +1,11 @@
+{
+  "name": "phaserGame",
+  "description": "simple game",
+  "version": "0.1",
+  "main": "index.html",
+  "window": {
+    "toolbar": false,
+    "width": 850,
+    "height": 650
+  }
+}
