@@ -1,4 +1,6 @@
 var path = require('path');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+
 module.exports = {
 
     entry: {
@@ -17,12 +19,16 @@ module.exports = {
                 loaders: ['babel'],
                 include: path.join(__dirname, 'src')
             },
-            {
-                test: /\.css$/,
-                loader: 'style!css'
-            }
+              {
+                  test: /\.css$/,
+                  // loader: 'style!css'
+                  loader: ExtractTextPlugin.extract('style-loader', 'css-loader')
+              }
         ]
     },
+    plugins: [
+        new ExtractTextPlugin('main.css')
+    ],
 
     devtool: '#inline-source-map'
 
