@@ -18,11 +18,13 @@
   },
   "homepage": "https://github.com/alstolbov/es6-hot-boilerplat#readme",
   "dependencies": {
-    "webpack": "^1.11.0",
     "babel-core": "^6.3.21",
     "babel-eslint": "^5.0.0-beta6",
     "babel-loader": "^6.2.0",
     "babel-preset-es2015": "^6.3.13",
+    "css-loader": "^0.23.1",
+    "style-loader": "^0.13.0",
+    "webpack": "^1.11.0",
     "webpack-dev-server": "^1.8.0"
   }
 }
