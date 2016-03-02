@@ -1,4 +1,21 @@
 import './main.css';
-import a from './test';
+import BD from './lib/BuilDom';
+import Options from './options';
+import Store from './store';
+import MainGameScreen from './game/mainGameScreen';
 
-a.a();
+const rootNode = BD.$(Options.rootNode);
+rootNode.style.width = Options.gameSize.w + 'px';
+rootNode.style.height = Options.gameSize.h + 'px';
+
+Store.level = 0;
+
+const app = new MainGameScreen();
+app.create();
+
+// setTimeout(
+//   () => {
+//     app.unmount();
+//   },
+//   1300
+// );
