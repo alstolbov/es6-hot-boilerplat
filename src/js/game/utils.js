@@ -13,14 +13,13 @@ function _isCollide (rect1, rect2) {
 
 function _Collider (rect1, items, exeption) {
   const res = {};
-
   Object.keys(items).forEach((type) => {
     Array.from(items[type]).forEach((item, iter) => {
       const itemParams = item.getParams();
       let isCompare = true;
+
       if (exeption &&
-        itemParams.x == rect1.x &&
-        itemParams.y == rect1.y
+        itemParams.id == rect1.id
       ) {
         isCompare = false;
       }

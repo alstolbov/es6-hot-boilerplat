@@ -46,20 +46,22 @@ export default class MainGameScreen {
     }
 
     clickArea.onmouseup = (e) => {
-      Store.click.end.x = e.clientX;
-      Store.click.end.y = e.clientY;
-      if (Store.click.itemType == "Box") {
-        Store.click.direction = Utils.getDirection(Store.click.start, Store.click.end);
-        Store.click.isMove = true;
-        this.update();
+      if (!Store.click.isMove) {
+        Store.click.end.x = e.clientX;
+        Store.click.end.y = e.clientY;
+        if (Store.click.itemType == "Box") {
+          Store.click.direction = Utils.getDirection(Store.click.start, Store.click.end);
+          Store.click.isMove = true;
+          this.update();
+        }
       }
     }
 
     const DOMFragm = document.createDocumentFragment();
     Object.keys(Level.objects).forEach((key) => {
       Store.objects[key] = Array.from(Level.objects[key]).map(
-        (item) => {
-          const Item = new Box({x: item[0], y: item[1]});
+        (item, iter) => {
+          const Item = new Box({x: item[0], y: item[1], id: iter});
           DOMFragm.appendChild(Item.create())
 
           return Item;
@@ -76,7 +78,7 @@ export default class MainGameScreen {
   update () {
     // if (Store.click.isMove) {
     const _this = this;
-    Store.Interval = setTimeout(
+    Store.Interval = setInterval(
       () => {
         const item = Store.objects[Store.click.itemType][Store.click.itemId];
         const itemParams= item.getParams();
@@ -84,19 +86,32 @@ export default class MainGameScreen {
           x: itemParams.x,
           y: itemParams.y
         };
-        console.log(Store.click.direction);
+        let needMove = true;
+
         switch (Store.click.direction) {
           case "up":
             nextPos.y = itemParams.y-1;
+            if (nextPos.y <= 0) {
+              needMove = false;
+            }
             break;
           case "down":
             nextPos.y = itemParams.y+1;
+            if (nextPos.y >= Options.gameSize.h) {
+              needMove = false;
+            }
             break;
           case "left":
-            itemParams.x = itemParams.x-1;
+            nextPos.x = itemParams.x-1;
+            if (nextPos.x <= 0) {
+              needMove = false;
+            }
             break;
           case "right":
-            itemParams.x = itemParams.x+1;
+            nextPos.x = itemParams.x+1;
+            if (nextPos.x >= Options.gameSize.w) {
+              needMove = false;
+            }
             break;
         }
 
@@ -105,14 +120,16 @@ export default class MainGameScreen {
         virtObj.y = nextPos.y;
         const collider = Utils.isCollide(virtObj, Store.objects);
 
-        if (collider.isCollide) {
-          console.log(collider);
+        if (collider.isCollide || !needMove) {
           Store.click = Utils.clearClickStore();
           _this.unmount();
         } else {
-          console.log(nextPos);
           item.updatePos(nextPos);
-          _this.update();
+          // _this.update();
+        }
+
+        if (!needMove) {
+          this.reset();
         }
       },
       Options.speed
@@ -124,13 +141,14 @@ export default class MainGameScreen {
     Object.keys(Store.objects).forEach((type) => {
       Array.from(Store.objects[type]).forEach((item, iter) => {
         const defaultItem = Level.objects[type][iter];
-        item.updatePos(defaultItem[0], defaultItem[1]);
+        item.updatePos({x: defaultItem[0], y: defaultItem[1]});
       });
     });
   }
 
   unmount () {
-    clearTimeout(Store.Interval);
+    // clearTimeout(Store.Interval);
+    clearInterval(Store.Interval);
     Store.Interval = false;
   }
 };

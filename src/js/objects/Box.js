@@ -3,9 +3,10 @@ import Options from '../options';
 
 export default class Box {
 
-  constructor (pos) {
-    this.x = pos.x;
-    this.y = pos.y
+  constructor (props) {
+    this.x = props.x;
+    this.y = props.y;
+    this.id = props.id;
     // return this.create();
   }
 
@@ -31,15 +32,16 @@ export default class Box {
     this.node.style.transform = 'translate(' + this.x + 'px, ' + this.y + 'px)';
   }
 
-  updatePos (x, y) {
-    this.x = x;
-    this.y = y;
+  updatePos (nextPos) {
+    this.x = nextPos.x;
+    this.y = nextPos.y;
     this.node.style.transform = 'translate(' + this.x + 'px, ' + this.y + 'px)';
   }
 
   getParams () {
     return {
       type: 'Box',
+      id: this.id,
       x: this.x,
       y: this.y,
       width: Options.boxSize,
