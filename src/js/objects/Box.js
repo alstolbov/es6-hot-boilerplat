@@ -27,15 +27,15 @@ export default class Box {
     return this.node;
   }
 
-  move () {
-    this.x++;
-    this.node.style.transform = 'translate(' + this.x + 'px, ' + this.y + 'px)';
-  }
-
   updatePos (nextPos) {
     this.x = nextPos.x;
     this.y = nextPos.y;
     this.node.style.transform = 'translate(' + this.x + 'px, ' + this.y + 'px)';
+  }
+
+  onCollision (item) {
+    // item.updatePos({x: 50, y:50});
+    return false;
   }
 
   getParams () {

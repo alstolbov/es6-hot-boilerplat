@@ -6,6 +6,11 @@ import Store from '../store';
 import Box from '../objects/Box';
 import * as Utils from './utils';
 
+const ItemList = {
+  Box: Box,
+  Wall: false
+};
+
 const rootNode = BD.$(Options.rootNode);
 
 export default class MainGameScreen {
@@ -61,7 +66,7 @@ export default class MainGameScreen {
     Object.keys(Level.objects).forEach((key) => {
       Store.objects[key] = Array.from(Level.objects[key]).map(
         (item, iter) => {
-          const Item = new Box({x: item[0], y: item[1], id: iter});
+          const Item = new ItemList[key]({x: item[0], y: item[1], id: iter});
           DOMFragm.appendChild(Item.create())
 
           return Item;
@@ -76,7 +81,6 @@ export default class MainGameScreen {
   }
 
   update () {
-    // if (Store.click.isMove) {
     const _this = this;
     Store.Interval = setInterval(
       () => {
@@ -123,6 +127,7 @@ export default class MainGameScreen {
         if (collider.isCollide || !needMove) {
           Store.click = Utils.clearClickStore();
           _this.unmount();
+          Store.objects[collider.itemType][collider.itemId].onCollision(item);
         } else {
           item.updatePos(nextPos);
           // _this.update();
