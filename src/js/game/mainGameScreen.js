@@ -14,6 +14,8 @@ const ItemList = {
 
 const rootNode = BD.$(Options.rootNode);
 
+const Offset = Utils.offset(rootNode);
+
 export default class MainGameScreen {
 
   constructor () {
@@ -37,14 +39,13 @@ export default class MainGameScreen {
     clickArea.onmousedown = (e) => {
       if (!Store.click.isMove) {
         const res = Utils.getItemUnderClick({
-          x: e.clientX,
-          y: e.clientY,
+          x: e.clientX - Offset.left,
+          y: e.clientY - Offset.top,
           items: Store.objects
         });
-
         if (res.isCollide) {
-          Store.click.start.x = e.clientX;
-          Store.click.start.y = e.clientY;
+          Store.click.start.x = e.clientX - Offset.left;
+          Store.click.start.y = e.clientY - Offset.top;
           Store.click.itemType = res.itemType;
           Store.click.itemId = res.itemId;
         }
@@ -52,12 +53,12 @@ export default class MainGameScreen {
     }
 
     clickArea.onmouseup = (e) => {
-      if (!Store.click.isMove) {
+      if (!Store.click.isMove && (Store.click.itemId || Store.click.itemId == 0)) {
         const item = Store.objects[Store.click.itemType][Store.click.itemId];
         const itemParams= item.getParams();
 
-        Store.click.end.x = e.clientX;
-        Store.click.end.y = e.clientY;
+        Store.click.end.x = e.clientX - Offset.left;
+        Store.click.end.y = e.clientY - Offset.top;
 
         if (itemParams.movable) {
           Store.click.direction = Utils.getDirection(Store.click.start, Store.click.end);
@@ -91,6 +92,7 @@ export default class MainGameScreen {
       () => {
         const item = Store.objects[Store.click.itemType][Store.click.itemId];
         const itemParams= item.getParams();
+
         const nextPos = {
           x: itemParams.x,
           y: itemParams.y

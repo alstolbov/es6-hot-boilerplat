@@ -79,3 +79,11 @@ export function clearClickStore () {
     direction: false
   }
 };
+
+export function offset (elt) {
+  const rect = elt.getBoundingClientRect(), bodyElt = document.body;
+  return {
+      top: rect.top + bodyElt .scrollTop,
+      left: rect.left + bodyElt .scrollLeft
+  }
+}
