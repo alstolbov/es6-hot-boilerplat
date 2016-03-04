@@ -7,7 +7,6 @@ export default class Box {
     this.x = props.x;
     this.y = props.y;
     this.id = props.id;
-    // return this.create();
   }
 
   create () {
@@ -18,19 +17,13 @@ export default class Box {
           position: 'absolute',
           width: Options.boxSize + 'px',
           height: Options.boxSize + 'px',
-          'background-color': '#ddd',
+          'background-color': '#333',
           transform: 'translate(' + this.x + 'px, ' + this.y + 'px)'
         }
       }
     );
 
     return this.node;
-  }
-
-  updatePos (nextPos) {
-    this.x = nextPos.x;
-    this.y = nextPos.y;
-    this.node.style.transform = 'translate(' + this.x + 'px, ' + this.y + 'px)';
   }
 
   onCollision (item) {
@@ -40,13 +33,13 @@ export default class Box {
 
   getParams () {
     return {
-      type: 'Box',
+      type: 'Wall',
       id: this.id,
       x: this.x,
       y: this.y,
       width: Options.boxSize,
       height: Options.boxSize,
-      movable: true
+      movable: false
     };
   }
 

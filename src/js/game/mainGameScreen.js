@@ -4,11 +4,12 @@ import Levels from '../Levels';
 import Store from '../store';
 
 import Box from '../objects/Box';
+import Wall from '../objects/Wall';
 import * as Utils from './utils';
 
 const ItemList = {
   Box: Box,
-  Wall: false
+  Wall: Wall
 };
 
 const rootNode = BD.$(Options.rootNode);
@@ -52,9 +53,13 @@ export default class MainGameScreen {
 
     clickArea.onmouseup = (e) => {
       if (!Store.click.isMove) {
+        const item = Store.objects[Store.click.itemType][Store.click.itemId];
+        const itemParams= item.getParams();
+
         Store.click.end.x = e.clientX;
         Store.click.end.y = e.clientY;
-        if (Store.click.itemType == "Box") {
+
+        if (itemParams.movable) {
           Store.click.direction = Utils.getDirection(Store.click.start, Store.click.end);
           Store.click.isMove = true;
           this.update();
@@ -127,7 +132,9 @@ export default class MainGameScreen {
         if (collider.isCollide || !needMove) {
           Store.click = Utils.clearClickStore();
           _this.unmount();
-          Store.objects[collider.itemType][collider.itemId].onCollision(item);
+          if (collider.isCollide) {
+            Store.objects[collider.itemType][collider.itemId].onCollision(item);
+          }
         } else {
           item.updatePos(nextPos);
           // _this.update();
