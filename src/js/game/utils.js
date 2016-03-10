@@ -1,3 +1,5 @@
+import Options from '../options';
+
 function _isCollide (rect1, rect2) {
   let res = false;
   if (rect1.x < rect2.x + rect2.width &&
@@ -76,7 +78,8 @@ export function clearClickStore () {
     itemType: '',
     itemId: false,
     isMove: false,
-    direction: false
+    direction: false,
+    square: {}
   }
 };
 
@@ -86,4 +89,41 @@ export function offset (elt) {
       top: rect.top + bodyElt .scrollTop,
       left: rect.left + bodyElt .scrollLeft
   }
+}
+
+function getSquare (data) {
+  return {
+    x: Math.floor(data.x/Options.boxSize),
+    y: Math.floor(data.y/Options.boxSize)
+  };
+}
+
+export function getSquareUnderClick (data) {
+  let res = false;
+  // const xSquare = Math.floor(data.x/Options.boxSize);
+  // const ySquare = Math.floor(data.y/Options.boxSize);
+  const squarePos = getSquare(data);
+  const obj = data.matrix[squarePos.y][squarePos.x];
+
+  if (obj.id) {
+    res = {};
+    res.itemType = obj.type;
+    res.itemId = obj.id;
+    res.isCollide = true;
+    res.square = {};
+    res.square.start = {x: squarePos.x, y: squarePos.y};
+  }
+
+  return res;
+}
+
+export function updateMatrix (start, end, matrix) {
+  const tmpMatrix = matrix;
+  const endSquare = getSquare(end);
+  tmpMatrix[endSquare.y][endSquare.x] = tmpMatrix[start.y][start.x];
+  tmpMatrix[start.y][start.x] = {
+    type: 'Empty'
+  };
+
+  return tmpMatrix;
 }

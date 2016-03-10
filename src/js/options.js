@@ -1,9 +1,10 @@
 export default {
   rootNode: '#game',
   gameSize: {
-    w: 300,
+    w: 400,
     h: 200
   },
-  boxSize: 20,
-  speed: 20
+  boxSize: 40,
+  speed: 10,
+  speedCoeff: 2
 };

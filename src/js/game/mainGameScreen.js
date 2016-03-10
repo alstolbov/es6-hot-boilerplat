@@ -24,6 +24,11 @@ export default class MainGameScreen {
 
   create () {
     const Level = Levels[Store.level];
+    const wItems = Options.gameSize.w/Options.boxSize;
+    const hItems = Options.gameSize.h/Options.boxSize;
+
+    Store.matrix = [];
+    Store.click = Utils.clearClickStore();
 
     const clickArea = BD.createElement(
       'div',
@@ -38,22 +43,34 @@ export default class MainGameScreen {
 
     clickArea.onmousedown = (e) => {
       if (!Store.click.isMove) {
-        const res = Utils.getItemUnderClick({
+        // const res = Utils.getItemUnderClick({
+        //   x: e.clientX - Offset.left,
+        //   y: e.clientY - Offset.top,
+        //   items: Store.objects
+        // });
+        // if (res.isCollide) {
+        //   Store.click.start.x = e.clientX - Offset.left;
+        //   Store.click.start.y = e.clientY - Offset.top;
+        //   Store.click.itemType = res.itemType;
+        //   Store.click.itemId = res.itemId;
+        // }
+        const res = Utils.getSquareUnderClick({
           x: e.clientX - Offset.left,
           y: e.clientY - Offset.top,
-          items: Store.objects
+          matrix: Store.matrix
         });
         if (res.isCollide) {
           Store.click.start.x = e.clientX - Offset.left;
           Store.click.start.y = e.clientY - Offset.top;
           Store.click.itemType = res.itemType;
           Store.click.itemId = res.itemId;
+          Store.click.square.start = res.square.start;
         }
       }
     }
 
     clickArea.onmouseup = (e) => {
-      if (!Store.click.isMove && (Store.click.itemId || Store.click.itemId == 0)) {
+      if (!Store.click.isMove && Store.click.itemType && (Store.click.itemId || Store.click.itemId == 0)) {
         const item = Store.objects[Store.click.itemType][Store.click.itemId];
         const itemParams= item.getParams();
 
@@ -69,16 +86,44 @@ export default class MainGameScreen {
     }
 
     const DOMFragm = document.createDocumentFragment();
-    Object.keys(Level.objects).forEach((key) => {
-      Store.objects[key] = Array.from(Level.objects[key]).map(
-        (item, iter) => {
-          const Item = new ItemList[key]({x: item[0], y: item[1], id: iter});
-          DOMFragm.appendChild(Item.create())
 
-          return Item;
+    // Object.keys(Level.objects).forEach((key) => {
+    //   Store.objects[key] = Array.from(Level.objects[key]).map(
+    //     (item, iter) => {
+    //       const Item = new ItemList[key]({x: item[0], y: item[1], id: iter});
+    //       DOMFragm.appendChild(Item.create())
+
+    //       return Item;
+    //     }
+    //   );
+    // });
+
+    let Item;
+    let boxIter = 0;
+    Store.objects.Box = [];
+    for (let i = 0; i < hItems; i++) {
+      Store.matrix.push([]);
+      for (let r = 0; r < wItems; r++) {
+        if (Math.random() > 0.7) {
+          Item = new Box({
+            x: r * Options.boxSize,
+            y: i * Options.boxSize,
+            id: boxIter
+          });
+          DOMFragm.appendChild(Item.create());
+          Store.objects.Box.push(Item);
+          Store.matrix[i][r] = {
+            id: boxIter,
+            type: 'Box' 
+          }
+          boxIter++;
+        } else {
+          Store.matrix[i][r] = {
+            type: 'Empty'
+          }
         }
-      );
-    });
+      }
+    }
 
     DOMFragm.appendChild(clickArea);
     BD.mountElement(rootNode, DOMFragm);
@@ -101,26 +146,26 @@ export default class MainGameScreen {
 
         switch (Store.click.direction) {
           case "up":
-            nextPos.y = itemParams.y-1;
-            if (nextPos.y <= 0) {
+            nextPos.y = itemParams.y - Options.speedCoeff;
+            if (nextPos.y < 0) {
               needMove = false;
             }
             break;
           case "down":
-            nextPos.y = itemParams.y+1;
-            if (nextPos.y >= Options.gameSize.h) {
+            nextPos.y = itemParams.y + Options.speedCoeff;
+            if (nextPos.y > Options.gameSize.h) {
               needMove = false;
             }
             break;
           case "left":
-            nextPos.x = itemParams.x-1;
-            if (nextPos.x <= 0) {
+            nextPos.x = itemParams.x - Options.speedCoeff;
+            if (nextPos.x < 0) {
               needMove = false;
             }
             break;
           case "right":
-            nextPos.x = itemParams.x+1;
-            if (nextPos.x >= Options.gameSize.w) {
+            nextPos.x = itemParams.x + Options.speedCoeff;
+            if (nextPos.x > Options.gameSize.w) {
               needMove = false;
             }
             break;
@@ -130,8 +175,12 @@ export default class MainGameScreen {
         virtObj.x = nextPos.x;
         virtObj.y = nextPos.y;
         const collider = Utils.isCollide(virtObj, Store.objects);
-
         if (collider.isCollide || !needMove) {
+          Store.matrix = Utils.updateMatrix(
+            Store.click.square.start,
+            item.getParams(),
+            Store.matrix
+          );
           Store.click = Utils.clearClickStore();
           _this.unmount();
           if (collider.isCollide) {
