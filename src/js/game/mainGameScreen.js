@@ -27,6 +27,7 @@ export default class MainGameScreen {
     const wItems = Options.gameSize.w/Options.boxSize;
     const hItems = Options.gameSize.h/Options.boxSize;
 
+    rootNode.innerHTML = '';
     Store.matrix = [];
     Store.click = Utils.clearClickStore();
 
@@ -200,13 +201,14 @@ export default class MainGameScreen {
   }
 
   reset () {
-    const Level = Levels[Store.level]
-    Object.keys(Store.objects).forEach((type) => {
-      Array.from(Store.objects[type]).forEach((item, iter) => {
-        const defaultItem = Level.objects[type][iter];
-        item.updatePos({x: defaultItem[0], y: defaultItem[1]});
-      });
-    });
+    // const Level = Levels[Store.level]
+    // Object.keys(Store.objects).forEach((type) => {
+    //   Array.from(Store.objects[type]).forEach((item, iter) => {
+    //     const defaultItem = Level.objects[type][iter];
+    //     item.updatePos({x: defaultItem[0], y: defaultItem[1]});
+    //   });
+    // });
+    this.create();
   }
 
   unmount () {
