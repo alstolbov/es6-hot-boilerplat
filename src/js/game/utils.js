@@ -1,4 +1,5 @@
 import Options from '../options';
+import Store from '../store';
 
 function _isCollide (rect1, rect2) {
   let res = false;
@@ -105,7 +106,7 @@ export function getSquareUnderClick (data) {
   const squarePos = getSquare(data);
   const obj = data.matrix[squarePos.y][squarePos.x];
 
-  if (obj.id) {
+  if (obj.id || obj.id == 0) {
     res = {};
     res.itemType = obj.type;
     res.itemId = obj.id;
@@ -126,4 +127,76 @@ export function updateMatrix (start, end, matrix) {
   };
 
   return tmpMatrix;
+}
+
+export function randInt (_max) {
+  const max = _max || 1;
+  return Math.floor(Math.random()*max);
+}
+
+function checkMatrixItem (square, directions, res) {
+  const itemInMatrix = Store.matrix[square.y][square.x];
+
+  if (
+    (itemInMatrix.id || itemInMatrix.id == 0) &&
+    itemInMatrix.type == "Box"
+  ) {
+    const item = Store.objects.Box[itemInMatrix.id]
+    const itemParams = item.getParams();
+    const nextSquare = {};
+    switch (directions) {
+      case "r":
+        nextSquare.x = square.x + 1;
+        nextSquare.y = square.y;
+        break;
+      case "l":
+        nextSquare.x = square.x - 1;
+        nextSquare.y = square.y;
+        break;
+      case "u":
+        nextSquare.x = square.x;
+        nextSquare.y = square.y - 1;
+        break;
+      case "d":
+        nextSquare.x = square.x;
+        nextSquare.y = square.y + 1;
+        break;
+    }
+
+    if (Store.matrix[nextSquare.y] && Store.matrix[nextSquare.y][nextSquare.x]) {
+      const nextItemInMatrix = Store.matrix[nextSquare.y][nextSquare.x];
+      if (
+        (nextItemInMatrix.id || nextItemInMatrix.id == 0) &&
+        nextItemInMatrix.type == "Box"
+      ) {
+        const nextItem = Store.objects.Box[nextItemInMatrix.id];
+        const nextItemParams = nextItem.getParams();
+        if (itemParams.colorId == nextItemParams.colorId) {
+          res.push({
+            item: nextItemParams,
+            squire: nextSquare
+          });
+          checkMatrixItem(nextSquare, directions, res);
+        }
+        // console.log(square, nextSquare);
+      }
+    }
+  }
+}
+
+export function checkMatrix (item) {
+  const res = [];
+  const square = getSquare(item);
+
+  res.push({
+    item: item,
+    squire: square,
+    primary: true
+  });
+  checkMatrixItem (square, 'r', res);
+  checkMatrixItem (square, 'l', res);
+  checkMatrixItem (square, 'u', res);
+  checkMatrixItem (square, 'd', res);
+
+  return res;
 }

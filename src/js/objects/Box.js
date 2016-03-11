@@ -4,9 +4,12 @@ import Options from '../options';
 export default class Box {
 
   constructor (props) {
+    this.type = "Box";
+    this.state = "simple";
     this.x = props.x;
     this.y = props.y;
     this.id = props.id;
+    this.colorId = props.colorId;
     // return this.create();
   }
 
@@ -18,7 +21,7 @@ export default class Box {
           position: 'absolute',
           width: Options.boxSize + 'px',
           height: Options.boxSize + 'px',
-          'background-color': '#ddd',
+          'background-color': Options.colors[this.colorId].style,
           transform: 'translate(' + this.x + 'px, ' + this.y + 'px)'
         }
       }
@@ -38,15 +41,27 @@ export default class Box {
     return false;
   }
 
+  hide () {
+    // this.node.parentNode.remove(this.node);
+    this.node.style.display = "none";
+  }
+
+  changeState (state) {
+    this.state = state;
+    this.node.style.backgroundColor = '#000000';
+  }
+
   getParams () {
     return {
-      type: 'Box',
+      type: this.type,
+      state: this.state,
       id: this.id,
       x: this.x,
       y: this.y,
       width: Options.boxSize,
       height: Options.boxSize,
-      movable: true
+      movable: true,
+      colorId: this.colorId
     };
   }
 

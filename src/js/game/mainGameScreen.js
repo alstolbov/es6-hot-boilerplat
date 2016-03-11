@@ -44,17 +44,6 @@ export default class MainGameScreen {
 
     clickArea.onmousedown = (e) => {
       if (!Store.click.isMove) {
-        // const res = Utils.getItemUnderClick({
-        //   x: e.clientX - Offset.left,
-        //   y: e.clientY - Offset.top,
-        //   items: Store.objects
-        // });
-        // if (res.isCollide) {
-        //   Store.click.start.x = e.clientX - Offset.left;
-        //   Store.click.start.y = e.clientY - Offset.top;
-        //   Store.click.itemType = res.itemType;
-        //   Store.click.itemId = res.itemId;
-        // }
         const res = Utils.getSquareUnderClick({
           x: e.clientX - Offset.left,
           y: e.clientY - Offset.top,
@@ -88,17 +77,6 @@ export default class MainGameScreen {
 
     const DOMFragm = document.createDocumentFragment();
 
-    // Object.keys(Level.objects).forEach((key) => {
-    //   Store.objects[key] = Array.from(Level.objects[key]).map(
-    //     (item, iter) => {
-    //       const Item = new ItemList[key]({x: item[0], y: item[1], id: iter});
-    //       DOMFragm.appendChild(Item.create())
-
-    //       return Item;
-    //     }
-    //   );
-    // });
-
     let Item;
     let boxIter = 0;
     Store.objects.Box = [];
@@ -109,7 +87,8 @@ export default class MainGameScreen {
           Item = new Box({
             x: r * Options.boxSize,
             y: i * Options.boxSize,
-            id: boxIter
+            id: boxIter,
+            colorId: Utils.randInt(5)
           });
           DOMFragm.appendChild(Item.create());
           Store.objects.Box.push(Item);
@@ -154,7 +133,7 @@ export default class MainGameScreen {
             break;
           case "down":
             nextPos.y = itemParams.y + Options.speedCoeff;
-            if (nextPos.y > Options.gameSize.h) {
+            if (nextPos.y > Options.gameSize.h - Options.boxSize) {
               needMove = false;
             }
             break;
@@ -166,7 +145,7 @@ export default class MainGameScreen {
             break;
           case "right":
             nextPos.x = itemParams.x + Options.speedCoeff;
-            if (nextPos.x > Options.gameSize.w) {
+            if (nextPos.x > Options.gameSize.w - Options.boxSize) {
               needMove = false;
             }
             break;
@@ -177,14 +156,29 @@ export default class MainGameScreen {
         virtObj.y = nextPos.y;
         const collider = Utils.isCollide(virtObj, Store.objects);
         if (collider.isCollide || !needMove) {
+          const newParams = item.getParams();
           Store.matrix = Utils.updateMatrix(
             Store.click.square.start,
-            item.getParams(),
+            newParams,
             Store.matrix
           );
           Store.click = Utils.clearClickStore();
           _this.unmount();
           if (collider.isCollide) {
+            const lines = Utils.checkMatrix(newParams);
+            if (lines.length > 2) {
+              Array.from(lines).forEach(
+                (item) => {
+                  // console.log(item.item.id, item.squire);
+                  const itemObj = Store.objects[item.item.type][item.item.id];
+                  if (!item.primary) {
+                    itemObj.hide();
+                  } else {
+                    itemObj.changeState("colored");
+                  }
+                }
+              );
+            }
             Store.objects[collider.itemType][collider.itemId].onCollision(item);
           }
         } else {
