@@ -22,7 +22,9 @@ export default class Box {
           width: Options.boxSize + 'px',
           height: Options.boxSize + 'px',
           'background-color': Options.colors[this.colorId].style,
-          transform: 'translate(' + this.x + 'px, ' + this.y + 'px)'
+          // transform: 'translate(' + this.x + 'px, ' + this.y + 'px)'
+          left: this.x + 'px',
+          top: this.y + 'px'
         }
       }
     );
@@ -33,7 +35,9 @@ export default class Box {
   updatePos (nextPos) {
     this.x = nextPos.x;
     this.y = nextPos.y;
-    this.node.style.transform = 'translate(' + this.x + 'px, ' + this.y + 'px)';
+    // this.node.style.transform = 'translate(' + this.x + 'px, ' + this.y + 'px)';
+    this.node.style.left = this.x + 'px';
+    this.node.style.top = this.y + 'px';
   }
 
   onCollision (item) {
