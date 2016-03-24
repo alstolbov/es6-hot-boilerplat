@@ -12,10 +12,3 @@ Store.level = 0;
 
 const app = new MainGameScreen();
 app.create();
-
-// setTimeout(
-//   () => {
-//     app.unmount();
-//   },
-//   1300
-// );

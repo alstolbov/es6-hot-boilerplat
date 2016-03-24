@@ -6,3 +6,8 @@ html, body {
 #game {
   margin: 10px;
 }
+.area {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}

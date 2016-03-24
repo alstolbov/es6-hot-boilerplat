@@ -1,12 +1,19 @@
 import BD from '../lib/BuilDom';
 import Options from '../options';
 
-export default class Box {
+const size = {
+  w: 20,
+  h: 20
+};
+
+export default class Marker {
 
   constructor (props) {
-    this.x = props.x;
-    this.y = props.y;
+    this.x = props.data.x;
+    this.y = props.data.y;
     this.id = props.id;
+    this.active = props.isActive ? true : false;
+    this.name = props.data.name;
   }
 
   create () {
@@ -15,9 +22,9 @@ export default class Box {
       {
         style: {
           position: 'absolute',
-          width: Options.boxSize + 'px',
-          height: Options.boxSize + 'px',
-          'background-color': '#333',
+          width: size.w + 'px',
+          height: size.h + 'px',
+          'background-color': '#ddd',
           transform: 'translate(' + this.x + 'px, ' + this.y + 'px)'
         }
       }
@@ -26,20 +33,16 @@ export default class Box {
     return this.node;
   }
 
-  onCollision (item) {
-    // item.updatePos({x: 50, y:50});
-    return false;
-  }
-
   getParams () {
     return {
-      type: 'Wall',
+      type: 'Marker',
       id: this.id,
+      name: this.name,
       x: this.x,
       y: this.y,
-      width: Options.boxSize,
-      height: Options.boxSize,
-      movable: false
+      width: size.w,
+      height: size.h,
+      active: this.active
     };
   }
 
