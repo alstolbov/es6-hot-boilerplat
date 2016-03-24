@@ -33,7 +33,11 @@ export default class MainGameScreen {
     const ItemArea = BD.createElement(
       'div',
       {
-        class: 'itemArea area'
+        class: 'itemArea area',
+        style: {
+          width: Options.gameSize.w + 'px',
+          height: Options.gameSize.h + 'px'
+        }
       },
       DOMFragm
     );
@@ -45,7 +49,7 @@ export default class MainGameScreen {
         const marker = new Marker({
           data:item,
           id: iter,
-          isActive: Level.objects.markers.indexOf(item.name) + 1
+          isVisible: Level.objects.markers.indexOf(item.name) + 1
         });
         DOMFragm.appendChild(marker.create())
         return marker;
@@ -54,11 +58,15 @@ export default class MainGameScreen {
     const MarkerArea = BD.createElement(
       'div',
       {
-        class: 'markerArea area'
+        class: 'markerArea area',
+        style: {
+          width: Options.gameSize.w + 'px',
+          height: Options.gameSize.h + 'px'
+        }
       },
       DOMFragm
     );
-    console.log(rootNode);
+
     BD.mountElement(rootNode, MarkerArea);
   }
 

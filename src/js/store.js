@@ -1,3 +1,7 @@
 export default {
-  objects: {}
+  objects: {},
+  click: {
+    activeFirst: false,
+    activeSecond: false
+  }
 };

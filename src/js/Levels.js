@@ -8,12 +8,14 @@ export default [
           x: 30,
           y: 20,
           w: 30,
-          h: 20
+          h: 20,
+          needMarker: 'red'
         }, {
           x: 40,
           y: 80,
           w: 20,
-          h: 20
+          h: 20,
+          needMarker: 'blue'
         }
       ]
     }

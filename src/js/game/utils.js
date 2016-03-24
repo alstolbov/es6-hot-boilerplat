@@ -71,12 +71,8 @@ export function getDirection(start, end) {
 
 export function clearClickStore () {
   return {
-    start: {},
-    end: {},
-    itemType: '',
-    itemId: false,
-    isMove: false,
-    direction: false
+    activeFirst: false,
+    activeSecond: false
   }
 };
 
