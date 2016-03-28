@@ -45,27 +45,6 @@ export default class Marker {
 
   setActivity () {
     const _this = this;
-    // Array.from(Store.objects.markers).forEach(
-    //   (item, iter) => {
-    //     if (iter !== _this.id) {
-    //       item.setUnactive();
-    //     } else {
-    //       if (_this.isActive) {
-    //         _this.setUnactive();
-    //         clearClickStore();
-    //       } else {
-    //         _this.setActive();
-    //         if (!Store.click.activeFirst) {
-    //           Store.click.activeFirst = {};
-    //           Store.click.activeFirst = _this.getParams();
-    //         } else {
-    //           Store.click.activeSecond = {};
-    //           Store.click.activeSecond = _this.getParams();
-    //         }
-    //       }
-    //     }
-    //   }
-    // );
 
     if (this.isActive) {
       this.setUnactive();

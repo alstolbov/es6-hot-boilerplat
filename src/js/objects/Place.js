@@ -1,5 +1,7 @@
 import BD from '../lib/BuilDom';
 import Options from '../options';
+import Store from '../store';
+import * as Utils from '../game/utils';
 
 export default class Place {
 
@@ -12,10 +14,19 @@ export default class Place {
     this.needMarker = props.data.needMarker;
     this.isActive = false;
     this.isVisible = props.isVisible || true;
+    this.clickArea = props.data.clickArea;
   }
 
   create () {
     const _this = this;
+    this.clickAreaItem = BD.createElement(
+      'area',
+      {
+        shape: "poly",
+        coords: this.clickArea
+      }
+    );
+
     this.node = BD.createElement(
       'div',
       {
@@ -27,10 +38,32 @@ export default class Place {
           top: this.y + 'px',
           left: this.x + 'px'
         }
-      }
+      },
+      [
+        BD.createElement(
+          'img',
+          {
+            usemap: "#place_" + this.id,
+            src: '/img/blue-marker.png',
+            width: this.w + 'px',
+            height: this.h + 'px',
+            style: {
+              opacity: 0
+            }
+          }
+        ),
+        BD.createElement(
+          'map',
+          {
+            name: "#place_" + this.id
+          },
+          this.clickAreaItem
+        )
+      ]
     );
 
-    this.node.onclick = () => {
+    this.clickAreaItem.onclick = (e) => {
+      // e.
       _this.setActivity();
       console.log(Store.click);
     };

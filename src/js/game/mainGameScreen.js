@@ -30,6 +30,44 @@ export default class MainGameScreen {
         return place;
       }
     );
+    // const ItemArea = BD.createElement(
+    //   'div',
+    //   {
+    //     class: 'itemArea area',
+    //     style: {
+    //       width: Options.gameSize.w + 'px',
+    //       height: Options.gameSize.h + 'px'
+    //     }
+    //   },
+    //   DOMFragm
+    // );
+    // BD.mountElement(rootNode, ItemArea);
+
+    // DOMFragm = document.createDocumentFragment();
+    Store.objects.markers = Array.from(Options.markers).map(
+      (item, iter) => {
+        const marker = new Marker({
+          data:item,
+          id: iter,
+          isVisible: Level.objects.markers.indexOf(item.name) + 1
+        });
+        DOMFragm.appendChild(marker.create())
+        return marker;
+      }
+    );
+    // const MarkerArea = BD.createElement(
+    //   'div',
+    //   {
+    //     class: 'markerArea area',
+    //     style: {
+    //       width: Options.gameSize.w + 'px',
+    //       height: Options.gameSize.h + 'px'
+    //     }
+    //   },
+    //   DOMFragm
+    // );
+
+    // BD.mountElement(rootNode, MarkerArea);
     const ItemArea = BD.createElement(
       'div',
       {
@@ -43,31 +81,6 @@ export default class MainGameScreen {
     );
     BD.mountElement(rootNode, ItemArea);
 
-    DOMFragm = document.createDocumentFragment();
-    Store.objects.markers = Array.from(Options.markers).map(
-      (item, iter) => {
-        const marker = new Marker({
-          data:item,
-          id: iter,
-          isVisible: Level.objects.markers.indexOf(item.name) + 1
-        });
-        DOMFragm.appendChild(marker.create())
-        return marker;
-      }
-    );
-    const MarkerArea = BD.createElement(
-      'div',
-      {
-        class: 'markerArea area',
-        style: {
-          width: Options.gameSize.w + 'px',
-          height: Options.gameSize.h + 'px'
-        }
-      },
-      DOMFragm
-    );
-
-    BD.mountElement(rootNode, MarkerArea);
   }
 
 };
