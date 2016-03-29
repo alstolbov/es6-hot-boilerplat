@@ -20,7 +20,7 @@ export default class MainGameScreen {
     const Level = Levels[Store.level];
     let DOMFragm = document.createDocumentFragment();
 
-    Store.objects.places = Array.from(Level.objects.places).map(
+    Store.objects.Place = Array.from(Level.objects.places).map(
       (item, iter) => {
         const place = new Place({
           data: item,
@@ -30,21 +30,8 @@ export default class MainGameScreen {
         return place;
       }
     );
-    // const ItemArea = BD.createElement(
-    //   'div',
-    //   {
-    //     class: 'itemArea area',
-    //     style: {
-    //       width: Options.gameSize.w + 'px',
-    //       height: Options.gameSize.h + 'px'
-    //     }
-    //   },
-    //   DOMFragm
-    // );
-    // BD.mountElement(rootNode, ItemArea);
 
-    // DOMFragm = document.createDocumentFragment();
-    Store.objects.markers = Array.from(Options.markers).map(
+    Store.objects.Marker = Array.from(Options.markers).map(
       (item, iter) => {
         const marker = new Marker({
           data:item,

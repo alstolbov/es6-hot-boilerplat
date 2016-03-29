@@ -2,6 +2,7 @@ import BD from '../lib/BuilDom';
 import Options from '../options';
 import Store from '../store';
 import * as Utils from '../game/utils';
+import * as Common from '../game/common';
 
 const size = {
   w: 20,
@@ -37,7 +38,6 @@ export default class Marker {
 
     this.node.onclick = () => {
       _this.setActivity();
-      console.log(Store.click);
     };
 
     return this.node;
@@ -48,7 +48,7 @@ export default class Marker {
 
     if (this.isActive) {
       this.setUnactive();
-      clearClickStore();
+      Store.click = Utils.clearClickStore();
     } else {
       this.setActive();
       if (!Store.click.activeFirst) {
@@ -57,6 +57,7 @@ export default class Marker {
       } else {
         Store.click.activeSecond = {};
         Store.click.activeSecond = _this.getParams();
+        Common.onSecondClick();
       }
     }
   }

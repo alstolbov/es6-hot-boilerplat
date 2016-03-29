@@ -2,6 +2,7 @@ import BD from '../lib/BuilDom';
 import Options from '../options';
 import Store from '../store';
 import * as Utils from '../game/utils';
+import * as Common from '../game/common';
 
 export default class Place {
 
@@ -63,21 +64,45 @@ export default class Place {
     );
 
     this.clickAreaItem.onclick = (e) => {
-      // e.
+      e.preventDefault;
       _this.setActivity();
-      console.log(Store.click);
     };
 
     return this.node;
   }
 
   setActivity () {
+    const _this = this;
 
+    if (this.isActive) {
+      this.setUnactive();
+      Store.click = Utils.clearClickStore();
+    } else {
+      this.setActive();
+      if (!Store.click.activeFirst) {
+        Store.click.activeFirst = {};
+        Store.click.activeFirst = _this.getParams();
+      } else {
+        Store.click.activeSecond = {};
+        Store.click.activeSecond = _this.getParams();
+        Common.onSecondClick();
+      }
+    }
+  }
+
+  setActive () {
+    this.node.style.opacity = 0.5;
+    this.isActive = true;
+  }
+
+  setUnactive () {
+    this.node.style.opacity = 1;
+    this.isActive = false;
   }
 
   getParams () {
     return {
-      type: 'Item',
+      type: 'Place',
       id: this.id,
       x: this.x,
       y: this.y,
