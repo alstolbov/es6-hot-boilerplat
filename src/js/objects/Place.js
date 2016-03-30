@@ -4,6 +4,8 @@ import Store from '../store';
 import * as Utils from '../game/utils';
 import * as Common from '../game/common';
 
+const Type = "Place";
+
 export default class Place {
 
   constructor (props) {
@@ -79,7 +81,13 @@ export default class Place {
       Store.click = Utils.clearClickStore();
     } else {
       this.setActive();
-      if (!Store.click.activeFirst) {
+      if (Store.click.activeFirst.type == Type) {
+        Store.objects[Store.click.activeFirst.type][Store.click.activeFirst.id].setUnactive();
+      }
+      if (
+        !Store.click.activeFirst ||
+        Store.click.activeFirst.type == Type
+      ) {
         Store.click.activeFirst = {};
         Store.click.activeFirst = _this.getParams();
       } else {
@@ -102,7 +110,7 @@ export default class Place {
 
   getParams () {
     return {
-      type: 'Place',
+      type: Type,
       id: this.id,
       x: this.x,
       y: this.y,

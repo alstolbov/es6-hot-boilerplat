@@ -31,7 +31,8 @@ export default class Marker {
           height: size.h + 'px',
           'background-color': '#ddd',
           top: this.y + 'px',
-          left: this.x + 'px'
+          left: this.x + 'px',
+          cursor: 'pointer'
         }
       }
     );
