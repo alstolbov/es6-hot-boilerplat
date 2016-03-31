@@ -14,8 +14,12 @@ export default class Place {
     this.id = props.id;
     this.w = props.data.w;
     this.h = props.data.h;
+    this.name = props.data.name || Type + "_" + props.id;
     this.needMarker = props.data.needMarker;
+    this.onColorize = props.data.onColorize || false;
+    this.group = props.data.group || false;
     this.clickArea = props.data.clickArea;
+
     this.isActive = false;
     this.isVisible = props.data.isVisible || true;
     this.isUsed = props.data.isUsed || false;
@@ -83,7 +87,7 @@ export default class Place {
     } else {
       this.setActive();
       if (Store.click.activeFirst.type == Type) {
-        Store.objects[Store.click.activeFirst.type][Store.click.activeFirst.id].setUnactive();
+        Store.objects[Store.click.activeFirst.type][Store.click.activeFirst.name].setUnactive();
       }
       if (
         !Store.click.activeFirst ||
@@ -112,7 +116,10 @@ export default class Place {
   colorize () {
     this.isUsed = true;
     this.node.style.backgroundColor = this.needMarker;
-    console.log('colorized!');
+    this.clickAreaItem.style.cursor = "default";
+    if (this.onColorize) {
+      this.onColorize(Store);
+    }
   }
 
   getParams () {
@@ -123,6 +130,8 @@ export default class Place {
       y: this.y,
       width: this.w,
       height: this.h,
+      name: this.name,
+      group: this.group,
       isActive: this.isActive,
       isVisible: this.isVisible,
       needMarker: this.needMarker,

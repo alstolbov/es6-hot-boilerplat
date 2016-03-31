@@ -20,18 +20,31 @@ export default class MainGameScreen {
     const Level = Levels[Store.level];
     let DOMFragm = document.createDocumentFragment();
 
-    Store.objects.Place = Array.from(Level.objects.places).map(
+    BD.mountElement(
+      rootNode,
+      BD.createElement(
+        'style',
+        {
+          type: "text/css"
+        },
+        Utils.addLevelStyles(Level.classes || {})
+      )
+    );
+
+    Store.objects.Place = {};
+    Level.objects.places.forEach(
       (item, iter) => {
         const place = new Place({
           data: item,
           id: iter
         });
         DOMFragm.appendChild(place.create())
-        return place;
+        Store.objects.Place[place.name || 'Place_' + iter] = place;
       }
     );
 
-    Store.objects.Marker = Array.from(Options.markers).map(
+    Store.objects.Marker = {};
+    Options.markers.forEach(
       (item, iter) => {
         const marker = new Marker({
           data:item,
@@ -39,22 +52,10 @@ export default class MainGameScreen {
           isVisible: Level.objects.markers.indexOf(item.name) + 1
         });
         DOMFragm.appendChild(marker.create())
-        return marker;
+        Store.objects.Marker[marker.name] = marker;
       }
     );
-    // const MarkerArea = BD.createElement(
-    //   'div',
-    //   {
-    //     class: 'markerArea area',
-    //     style: {
-    //       width: Options.gameSize.w + 'px',
-    //       height: Options.gameSize.h + 'px'
-    //     }
-    //   },
-    //   DOMFragm
-    // );
 
-    // BD.mountElement(rootNode, MarkerArea);
     const ItemArea = BD.createElement(
       'div',
       {

@@ -83,3 +83,24 @@ export function offset (elt) {
       left: rect.left + bodyElt .scrollLeft
   }
 }
+
+export function addLevelStyles (stlsObj) {
+  let resStr = "";
+  Object.keys(stlsObj).forEach(
+    (className) => {
+      let classRules = className + "{";
+      Object.keys(stlsObj[className]).forEach(
+        (prop) => {
+          const delim = (className.indexOf("@") + 1) ?
+            " " :
+            ":"
+          ;
+          classRules += prop + delim + stlsObj[className][prop];
+        }
+      );
+      resStr += classRules + "}";
+    }
+  );
+
+  return resStr;
+}

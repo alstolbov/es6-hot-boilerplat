@@ -8,7 +8,7 @@ function onTwoMarkerSelection () {
   const secMarker = Store.click.activeSecond;
   let resMarker = false;
   Options.mixRules.forEach(
-    function (rule) {
+    (rule) => {
       if(
         (rule.need.indexOf(firstMarker.name) + 1) &&
         (rule.need.indexOf(secMarker.name) + 1)
@@ -19,16 +19,11 @@ function onTwoMarkerSelection () {
   );
 
   if (resMarker) {
-    Store.objects.Marker.forEach(
-      function (marker) {
-        if (
-          marker.name == resMarker &&
-          !marker.isVisible
-        ) {
-          marker.setVisible();
-        }
-      }
-    );
+    const nextMarker = Store.objects[firstMarker.type][resMarker];
+    const nextMarkerProps = nextMarker.getParams();
+    if (!nextMarkerProps.isVisible) {
+      nextMarker.setVisible();
+    }
   }
 }
 
@@ -47,17 +42,16 @@ function onMarkerAndPlaceSelection () {
     marker.name == place.needMarker &&
     !place.isUsed
   ) {
-    Store.objects[place.type][place.id].colorize();
+    Store.objects[place.type][place.name].colorize();
   }
 }
 
 export function onSecondClick () {
-  // console.log(Store.click);
   setTimeout(
-    function (){
-      const firstObj = Store.objects[Store.click.activeFirst.type][Store.click.activeFirst.id];
+    () => {
+      const firstObj = Store.objects[Store.click.activeFirst.type][Store.click.activeFirst.name];
       firstObj.setUnactive();
-      const secObj = Store.objects[Store.click.activeSecond.type][Store.click.activeSecond.id];
+      const secObj = Store.objects[Store.click.activeSecond.type][Store.click.activeSecond.name];
       secObj.setUnactive();
 
       if (
