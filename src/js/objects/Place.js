@@ -52,7 +52,7 @@ export default class Place {
           'img',
           {
             usemap: "#place_" + this.id,
-            src: '/img/blue-marker.png',
+            src: 'img/blue-marker.png',
             width: this.w + 'px',
             height: this.h + 'px',
             style: {
