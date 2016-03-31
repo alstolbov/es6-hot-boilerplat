@@ -15,6 +15,7 @@ export default class Marker {
     this.x = props.data.x;
     this.y = props.data.y;
     this.id = props.id;
+    this.color = props.data.color;
     this.isVisible = props.isVisible ? true : false;
     this.name = props.data.name;
     this.isActive = false;
@@ -26,12 +27,14 @@ export default class Marker {
       'div',
       {
         style: {
+          display: this.isVisible ? "block" : "none",
           position: 'absolute',
           width: size.w + 'px',
           height: size.h + 'px',
-          'background-color': '#ddd',
+          'background-color': this.color,
           top: this.y + 'px',
           left: this.x + 'px',
+          opacity: 1,
           cursor: 'pointer'
         }
       }
@@ -71,6 +74,11 @@ export default class Marker {
   setUnactive () {
     this.node.style.opacity = 1;
     this.isActive = false;
+  }
+
+  setVisible () {
+    this.node.style.display = "block";
+    this.isVisible = true;
   }
 
   getParams () {
