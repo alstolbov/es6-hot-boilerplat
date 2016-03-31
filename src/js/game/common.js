@@ -34,6 +34,21 @@ function onTwoMarkerSelection () {
 
 function onMarkerAndPlaceSelection () {
   console.log('marker+place');
+  const marker = Store.click.activeFirst.type == "Marker" ?
+    Store.click.activeFirst :
+    Store.click.activeSecond
+  ;
+  const place = Store.click.activeFirst.type == "Place" ?
+    Store.click.activeFirst :
+    Store.click.activeSecond
+  ;
+
+  if (
+    marker.name == place.needMarker &&
+    !place.isUsed
+  ) {
+    Store.objects[place.type][place.id].colorize();
+  }
 }
 
 export function onSecondClick () {

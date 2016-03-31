@@ -15,9 +15,10 @@ export default class Place {
     this.w = props.data.w;
     this.h = props.data.h;
     this.needMarker = props.data.needMarker;
-    this.isActive = false;
-    this.isVisible = props.isVisible || true;
     this.clickArea = props.data.clickArea;
+    this.isActive = false;
+    this.isVisible = props.data.isVisible || true;
+    this.isUsed = props.data.isUsed || false;
   }
 
   create () {
@@ -108,6 +109,12 @@ export default class Place {
     this.isActive = false;
   }
 
+  colorize () {
+    this.isUsed = true;
+    this.node.style.backgroundColor = this.needMarker;
+    console.log('colorized!');
+  }
+
   getParams () {
     return {
       type: Type,
@@ -118,7 +125,8 @@ export default class Place {
       height: this.h,
       isActive: this.isActive,
       isVisible: this.isVisible,
-      needMarker: this.needMarker
+      needMarker: this.needMarker,
+      isUsed: this.isUsed
     };
   }
 
