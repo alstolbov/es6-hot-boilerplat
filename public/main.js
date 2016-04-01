@@ -404,9 +404,14 @@
 	  id: 1,
 	  classes: {
 	    ".animatedShip": {
-	      animation: "moveclouds 3s linear infinite;"
+	      animation: "moveclouds 3s linear infinite;",
+	      "-webkit-animation": "moveclouds 3s linear infinite;"
 	    },
 	    "@keyframes moveclouds": {
+	      "0%": "{margin-left: 100px;}",
+	      "100%": "{margin-left: 0px;}"
+	    },
+	    "@-webkit-keyframes moveclouds": {
 	      "0%": "{margin-left: 100px;}",
 	      "100%": "{margin-left: 0px;}"
 	    }
