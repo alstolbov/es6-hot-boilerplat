@@ -1,25 +1,47 @@
+const markerY = 340;
+
 export default {
   rootNode: '#game',
   gameSize: {
-    w: 300,
-    h: 200
+    w: 800,
+    h: 600
   },
   markers: [
     {
       name: 'red',
       x: 10,
-      y: 10,
-      color: '#ff0000'
+      y: markerY,
+      bgPos: 0
     }, {
-      name: 'blue',
+      name: 'orange',
       x: 40,
-      y: 10,
-      color: '#005A90'
+      y: markerY,
+      bgPos: 50
+    }, {
+      name: 'yellow',
+      x: 70,
+      y: markerY,
+      bgPos: 100
     }, {
       name: 'green',
       x: 70,
-      y: 10,
-      color: '#009006'
+      y: markerY,
+      bgPos: 150
+    }, {
+      name: 'blue',
+      x: 70,
+      y: markerY,
+      bgPos: 200
+    }, {
+      name: 'purtle',
+      x: 70,
+      y: markerY,
+      bgPos: 150
+    }, {
+      name: 'black',
+      x: 70,
+      y: markerY,
+      bgPos: 300
     }
   ],
   mixRules: [

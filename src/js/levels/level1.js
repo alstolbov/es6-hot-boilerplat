@@ -14,8 +14,8 @@ function checkClouds (Store) {
     }
   );
   if (countCloud == countColorizedCloud) {
-    const ship = Store.objects.Place.ship;
-    ship.node.className = "animatedShip";
+    // const ship = Store.objects.Place.ship;
+    // ship.node.className = "animatedShip";
   }
 }
 
@@ -33,17 +33,18 @@ function animateClouds (Store) {
 
 export default   {
   id: 1,
+  needColorize: 3,
   classes: {
     ".animatedShip": {
-      animation: "moveclouds 3s linear infinite;",
-      "-webkit-animation": "moveclouds 3s linear infinite;"
+      animation: "moveclouds 8s linear infinite;",
+      "-webkit-animation": "moveclouds 8s linear infinite;"
     },
     "@keyframes moveclouds": {
-      "0%": "{margin-left: 100px;}",
+      "0%": "{margin-left: 300px;}",
       "100%": "{margin-left: 0px;}"
     },
     "@-webkit-keyframes moveclouds": {
-      "0%": "{margin-left: 100px;}",
+      "0%": "{margin-left: 300px;}",
       "100%": "{margin-left: 0px;}"
     }
   },
@@ -51,31 +52,34 @@ export default   {
     markers: ['red', 'green'],
     places: [
       {
-        name: 'ship',
+        name: 'oval',
         x: 30,
         y: 150,
-        w: 70,
-        h: 20,
+        w: 150,
+        h: 50,
         needMarker: 'red',
-        clickArea: '0, 0, 20, 0, 20, 20, 0, 20',
+        img: 'oval.png',
+        clickArea: '0, 0, 150, 0, 150, 40, 0, 40',
         onColorize: animateClouds
       }, {
         x: 30,
         y: 80,
-        w: 20,
-        h: 20,
+        w: 80,
+        h: 50,
         group: 'clouds',
         needMarker: 'blue',
-        clickArea: '0, 0, 20, 0, 20, 20, 0, 20',
+        img: 'clouds.png',
+        clickArea: '10, 5, 75, 5, 75, 45, 10, 45',
         onColorize: checkClouds
       }, {
-        x: 70,
-        y: 80,
-        w: 20,
-        h: 20,
+        x: 160,
+        y: 50,
+        w: 80,
+        h: 50,
         group: 'clouds',
         needMarker: 'blue',
-        clickArea: '0, 0, 20, 0, 20, 20, 0, 20',
+        img: 'clouds.png',
+        clickArea: '10, 5, 75, 5, 75, 45, 10, 45',
         onColorize: checkClouds
       }
     ]

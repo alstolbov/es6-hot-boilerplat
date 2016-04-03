@@ -195,27 +195,49 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	var markerY = 340;
+	
 	exports.default = {
 	  rootNode: '#game',
 	  gameSize: {
-	    w: 300,
-	    h: 200
+	    w: 800,
+	    h: 600
 	  },
 	  markers: [{
 	    name: 'red',
 	    x: 10,
-	    y: 10,
-	    color: '#ff0000'
+	    y: markerY,
+	    bgPos: 0
 	  }, {
-	    name: 'blue',
+	    name: 'orange',
 	    x: 40,
-	    y: 10,
-	    color: '#005A90'
+	    y: markerY,
+	    bgPos: 50
+	  }, {
+	    name: 'yellow',
+	    x: 70,
+	    y: markerY,
+	    bgPos: 100
 	  }, {
 	    name: 'green',
 	    x: 70,
-	    y: 10,
-	    color: '#009006'
+	    y: markerY,
+	    bgPos: 150
+	  }, {
+	    name: 'blue',
+	    x: 70,
+	    y: markerY,
+	    bgPos: 200
+	  }, {
+	    name: 'purtle',
+	    x: 70,
+	    y: markerY,
+	    bgPos: 150
+	  }, {
+	    name: 'black',
+	    x: 70,
+	    y: markerY,
+	    bgPos: 300
 	  }],
 	  mixRules: [{
 	    need: ['red', 'green'],
@@ -302,6 +324,19 @@
 	      var Level = _Levels2.default[_store2.default.level];
 	      var DOMFragm = document.createDocumentFragment();
 	
+	      _BuilDom2.default.mountElement(rootNode, _BuilDom2.default.createElement('div', {
+	        class: 'ramka area',
+	        style: {
+	          width: _options2.default.gameSize.w + 'px',
+	          height: _options2.default.gameSize.h + 'px',
+	          'margin': '-4px 0 0 -4px',
+	          // 'background-image': 'url("img/bg-paper.png")'
+	          border: '4px solid #444',
+	          'border-radius': '10px',
+	          'background-image': 'url("img/bg-paper.png")'
+	        }
+	      }));
+	
 	      _BuilDom2.default.mountElement(rootNode, _BuilDom2.default.createElement('style', {
 	        type: "text/css"
 	      }, Utils.addLevelStyles(Level.classes || {})));
@@ -385,8 +420,8 @@
 	    }
 	  });
 	  if (countCloud == countColorizedCloud) {
-	    var ship = Store.objects.Place.ship;
-	    ship.node.className = "animatedShip";
+	    // const ship = Store.objects.Place.ship;
+	    // ship.node.className = "animatedShip";
 	  }
 	}
 	
@@ -402,48 +437,52 @@
 	
 	exports.default = {
 	  id: 1,
+	  needColorize: 3,
 	  classes: {
 	    ".animatedShip": {
-	      animation: "moveclouds 3s linear infinite;",
-	      "-webkit-animation": "moveclouds 3s linear infinite;"
+	      animation: "moveclouds 8s linear infinite;",
+	      "-webkit-animation": "moveclouds 8s linear infinite;"
 	    },
 	    "@keyframes moveclouds": {
-	      "0%": "{margin-left: 100px;}",
+	      "0%": "{margin-left: 300px;}",
 	      "100%": "{margin-left: 0px;}"
 	    },
 	    "@-webkit-keyframes moveclouds": {
-	      "0%": "{margin-left: 100px;}",
+	      "0%": "{margin-left: 300px;}",
 	      "100%": "{margin-left: 0px;}"
 	    }
 	  },
 	  objects: {
 	    markers: ['red', 'green'],
 	    places: [{
-	      name: 'ship',
+	      name: 'oval',
 	      x: 30,
 	      y: 150,
-	      w: 70,
-	      h: 20,
+	      w: 150,
+	      h: 50,
 	      needMarker: 'red',
-	      clickArea: '0, 0, 20, 0, 20, 20, 0, 20',
+	      img: 'oval.png',
+	      clickArea: '0, 0, 150, 0, 150, 40, 0, 40',
 	      onColorize: animateClouds
 	    }, {
 	      x: 30,
 	      y: 80,
-	      w: 20,
-	      h: 20,
+	      w: 80,
+	      h: 50,
 	      group: 'clouds',
 	      needMarker: 'blue',
-	      clickArea: '0, 0, 20, 0, 20, 20, 0, 20',
+	      img: 'clouds.png',
+	      clickArea: '10, 5, 75, 5, 75, 45, 10, 45',
 	      onColorize: checkClouds
 	    }, {
-	      x: 70,
-	      y: 80,
-	      w: 20,
-	      h: 20,
+	      x: 160,
+	      y: 50,
+	      w: 80,
+	      h: 50,
 	      group: 'clouds',
 	      needMarker: 'blue',
-	      clickArea: '0, 0, 20, 0, 20, 20, 0, 20',
+	      img: 'clouds.png',
+	      clickArea: '10, 5, 75, 5, 75, 45, 10, 45',
 	      onColorize: checkClouds
 	    }]
 	  }
@@ -503,6 +542,7 @@
 	    this.onColorize = props.data.onColorize || false;
 	    this.group = props.data.group || false;
 	    this.clickArea = props.data.clickArea;
+	    this.img = props.data.img;
 	
 	    this.isActive = false;
 	    this.isVisible = props.data.isVisible || true;
@@ -520,16 +560,19 @@
 	
 	      this.node = _BuilDom2.default.createElement('div', {
 	        style: {
+	          display: this.isVisible ? 'block' : 'none',
+	
 	          position: 'absolute',
 	          width: this.w + 'px',
 	          height: this.h + 'px',
-	          'background-color': '#666',
+	          // 'background-color': '#666',
+	          'background-image': 'url("img/' + this.img + '")',
 	          top: this.y + 'px',
 	          left: this.x + 'px'
 	        }
 	      }, [_BuilDom2.default.createElement('img', {
 	        usemap: "#place_" + this.id,
-	        src: 'img/blue-marker.png',
+	        src: 'img/placeholder.png',
 	        width: this.w + 'px',
 	        height: this.h + 'px',
 	        style: {
@@ -549,44 +592,54 @@
 	  }, {
 	    key: 'setActivity',
 	    value: function setActivity() {
-	      var _this = this;
+	      if (this.isVisible) {
+	        var _this = this;
 	
-	      if (this.isActive) {
-	        this.setUnactive();
-	        _store2.default.click = Utils.clearClickStore();
-	      } else {
-	        this.setActive();
-	        if (_store2.default.click.activeFirst.type == Type) {
-	          _store2.default.objects[_store2.default.click.activeFirst.type][_store2.default.click.activeFirst.name].setUnactive();
-	        }
-	        if (!_store2.default.click.activeFirst || _store2.default.click.activeFirst.type == Type) {
-	          _store2.default.click.activeFirst = {};
-	          _store2.default.click.activeFirst = _this.getParams();
+	        if (this.isActive) {
+	          this.setUnactive();
+	          _store2.default.click = Utils.clearClickStore();
 	        } else {
-	          _store2.default.click.activeSecond = {};
-	          _store2.default.click.activeSecond = _this.getParams();
-	          Common.onSecondClick();
+	          this.setActive();
+	          if (_store2.default.click.activeFirst.type == Type) {
+	            _store2.default.objects[_store2.default.click.activeFirst.type][_store2.default.click.activeFirst.name].setUnactive();
+	          }
+	          if (!_store2.default.click.activeFirst || _store2.default.click.activeFirst.type == Type) {
+	            _store2.default.click.activeFirst = {};
+	            _store2.default.click.activeFirst = _this.getParams();
+	          } else {
+	            _store2.default.click.activeSecond = {};
+	            _store2.default.click.activeSecond = _this.getParams();
+	            Common.onSecondClick();
+	          }
 	        }
 	      }
 	    }
 	  }, {
 	    key: 'setActive',
 	    value: function setActive() {
-	      this.node.style.opacity = 0.5;
+	      if (!this.isUsed) {
+	        this.node.style.backgroundPosition = '0 ' + -this.h + 'px';
+	      } else {
+	        this.node.style.backgroundPosition = '0 ' + -this.h * 3 + 'px';
+	      }
 	      this.isActive = true;
 	    }
 	  }, {
 	    key: 'setUnactive',
 	    value: function setUnactive() {
-	      this.node.style.opacity = 1;
+	      if (!this.isUsed) {
+	        this.node.style.backgroundPosition = '0 0';
+	      } else {
+	        this.node.style.backgroundPosition = '0 ' + -this.h * 2 + 'px';
+	      }
 	      this.isActive = false;
 	    }
 	  }, {
 	    key: 'colorize',
 	    value: function colorize() {
 	      this.isUsed = true;
-	      this.node.style.backgroundColor = this.needMarker;
-	      this.clickAreaItem.style.cursor = "default";
+	      this.node.style.backgroundPosition = '0 ' + -this.h * 2 + 'px';
+	      // this.clickAreaItem.style.cursor = "default";
 	      if (this.onColorize) {
 	        this.onColorize(_store2.default);
 	      }
@@ -841,8 +894,8 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var size = {
-	  w: 20,
-	  h: 20
+	  w: 50,
+	  h: 50
 	};
 	
 	var Marker = function () {
@@ -852,7 +905,7 @@
 	    this.x = props.data.x;
 	    this.y = props.data.y;
 	    this.id = props.id;
-	    this.color = props.data.color;
+	    // this.color = props.data.color;
 	    this.isVisible = props.isVisible ? true : false;
 	    this.name = props.data.name;
 	    this.isActive = false;
@@ -864,15 +917,19 @@
 	      var _this = this;
 	      this.node = _BuilDom2.default.createElement('div', {
 	        style: {
-	          display: this.isVisible ? "block" : "none",
+	          // display: this.isVisible ? "block" : "none",
 	          position: 'absolute',
 	          width: size.w + 'px',
 	          height: size.h + 'px',
-	          'background-color': this.color,
-	          top: this.y + 'px',
-	          left: this.x + 'px',
-	          opacity: 1,
-	          cursor: 'pointer'
+	          'background-image': 'url("img/colors_7x3.png")',
+	          'background-position': this.isVisible ? -(this.id * size.w) + 'px 0' : -(this.id * size.w) + 'px ' + -size.w * 2 + 'px',
+	
+	          // top: this.y + 'px',
+	          // left: this.x + 'px',
+	          top: 540 + 'px',
+	          left: this.id * size.w + 'px',
+	          // opacity: 1,
+	          cursor: this.isVisible ? 'pointer' : 'default'
 	        }
 	      });
 	
@@ -885,39 +942,45 @@
 	  }, {
 	    key: 'setActivity',
 	    value: function setActivity() {
-	      var _this = this;
+	      if (this.isVisible) {
+	        var _this = this;
 	
-	      if (this.isActive) {
-	        this.setUnactive();
-	        _store2.default.click = Utils.clearClickStore();
-	      } else {
-	        this.setActive();
-	        if (!_store2.default.click.activeFirst) {
-	          _store2.default.click.activeFirst = {};
-	          _store2.default.click.activeFirst = _this.getParams();
+	        if (this.isActive) {
+	          this.setUnactive();
+	          _store2.default.click = Utils.clearClickStore();
 	        } else {
-	          _store2.default.click.activeSecond = {};
-	          _store2.default.click.activeSecond = _this.getParams();
-	          Common.onSecondClick();
+	          this.setActive();
+	          if (!_store2.default.click.activeFirst) {
+	            _store2.default.click.activeFirst = {};
+	            _store2.default.click.activeFirst = _this.getParams();
+	          } else {
+	            _store2.default.click.activeSecond = {};
+	            _store2.default.click.activeSecond = _this.getParams();
+	            Common.onSecondClick();
+	          }
 	        }
 	      }
 	    }
 	  }, {
 	    key: 'setActive',
 	    value: function setActive() {
-	      this.node.style.opacity = 0.5;
+	      // this.node.style.opacity = 0.5;
+	      this.node.style.backgroundPosition = -(this.id * size.w) + 'px ' + -size.w + 'px';
 	      this.isActive = true;
 	    }
 	  }, {
 	    key: 'setUnactive',
 	    value: function setUnactive() {
-	      this.node.style.opacity = 1;
+	      // this.node.style.opacity = 1;
+	      this.node.style.backgroundPosition = -(this.id * size.w) + 'px 0';
 	      this.isActive = false;
 	    }
 	  }, {
 	    key: 'setVisible',
 	    value: function setVisible() {
-	      this.node.style.display = "block";
+	      // this.node.style.display = "block";
+	      this.node.style.backgroundPosition = -(this.id * size.w) + 'px 0';
+	      this.node.style.cursor = 'pointer';
 	      this.isVisible = true;
 	    }
 	  }, {

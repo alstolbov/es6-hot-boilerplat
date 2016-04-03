@@ -23,6 +23,25 @@ export default class MainGameScreen {
     BD.mountElement(
       rootNode,
       BD.createElement(
+        'div',
+        {
+          class: 'ramka area',
+          style: {
+            width: Options.gameSize.w + 'px',
+            height: Options.gameSize.h + 'px',
+            'margin': '-4px 0 0 -4px',
+            // 'background-image': 'url("img/bg-paper.png")'
+            border: '4px solid #444',
+            'border-radius': '10px',
+          'background-image': 'url("img/bg-paper.png")'
+          }
+        }
+      )
+    );
+
+    BD.mountElement(
+      rootNode,
+      BD.createElement(
         'style',
         {
           type: "text/css"
